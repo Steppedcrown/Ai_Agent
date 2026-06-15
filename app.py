@@ -3,23 +3,22 @@
 
 import asyncio
 import json
-import os
 import queue
 import sys
 import threading
 from pathlib import Path
 
 from flask import Flask, render_template, request, Response, stream_with_context
-from dotenv import load_dotenv
+from dotenv import dotenv_values
 import anthropic
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 import rag
 
-load_dotenv()
+_env = dotenv_values(Path(__file__).parent / ".env")
 
 app = Flask(__name__)
-async_client = anthropic.AsyncAnthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+async_client = anthropic.AsyncAnthropic(api_key=_env["ANTHROPIC_API_KEY"])
 SERVER_SCRIPT = str(Path(__file__).parent / "server.py")
 KNOWLEDGE_FILE = Path(__file__).parent / "knowledge.txt"
 
