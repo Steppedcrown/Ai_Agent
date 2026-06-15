@@ -1,53 +1,71 @@
 # Test with: npx @modelcontextprotocol/inspector python server.py
 
 import os
-import anthropic
+import anthropic  # type: ignore
+import httpx  # type: ignore
 from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import FastMCP  # type: ignore
 
 load_dotenv()
 
 mcp = FastMCP("claude-mcp")
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+_aviation_key = os.environ.get("AVIATIONSTACK_API_KEY")
+_aviation_base = "https://api.aviationstack.com/v1"
 
 
 @mcp.tool()
-def ask_claude(prompt: str, system: str = "") -> str:
-    """Send a prompt to Claude and return the response."""
-    messages = [{"role": "user", "content": prompt}]
-    kwargs = {
-        "model": "claude-opus-4-8",
-        "max_tokens": 8096,
-        "thinking": {"type": "adaptive"},
-        "messages": messages,
-    }
-    if system:
-        kwargs["system"] = system
+def search_flights(
+    dep_iata: str = "",
+    arr_iata: str = "",
+    flight_iata: str = "",
+    airline_iata: str = "",
+    flight_status: str = "",
+    limit: int = 10,
+) -> dict:
+    """Search real-time flights from the AviationStack API.
 
-    with client.messages.stream(**kwargs) as stream:
-        return stream.get_final_message().content[0].text
-
-
-@mcp.tool()
-def ask_claude_with_history(
-    messages: list[dict],
-    system: str = "",
-) -> str:
-    """Send a multi-turn conversation to Claude and return the response.
-
-    messages should be a list of {"role": "user"|"assistant", "content": str} dicts.
+    Args:
+        dep_iata: Departure airport IATA code (e.g. 'SFO').
+        arr_iata: Arrival airport IATA code (e.g. 'JFK').
+        flight_iata: Specific flight number (e.g. 'AA100').
+        airline_iata: Airline IATA code (e.g. 'AA' for American).
+        flight_status: One of scheduled, active, landed, cancelled, incident, diverted.
+        limit: Max results to return (default 10).
     """
-    kwargs = {
-        "model": "claude-opus-4-8",
-        "max_tokens": 8096,
-        "thinking": {"type": "adaptive"},
-        "messages": messages,
-    }
-    if system:
-        kwargs["system"] = system
+    params: dict = {"access_key": _aviation_key, "limit": limit}
+    if dep_iata:
+        params["dep_iata"] = dep_iata
+    if arr_iata:
+        params["arr_iata"] = arr_iata
+    if flight_iata:
+        params["flight_iata"] = flight_iata
+    if airline_iata:
+        params["airline_iata"] = airline_iata
+    if flight_status:
+        params["flight_status"] = flight_status
 
-    with client.messages.stream(**kwargs) as stream:
-        return stream.get_final_message().content[0].text
+    r = httpx.get(f"{_aviation_base}/flights", params=params)
+    r.raise_for_status()
+    return r.json()
+
+
+@mcp.tool()
+def get_airport(iata_code: str) -> dict:
+    """Look up an airport by its IATA code (e.g. 'LAX', 'LHR')."""
+    params = {"access_key": _aviation_key, "iata_code": iata_code}
+    r = httpx.get(f"{_aviation_base}/airports", params=params)
+    r.raise_for_status()
+    return r.json()
+
+
+@mcp.tool()
+def get_airline(iata_code: str) -> dict:
+    """Look up an airline by its IATA code (e.g. 'AA', 'UA', 'DL')."""
+    params = {"access_key": _aviation_key, "iata_code": iata_code}
+    r = httpx.get(f"{_aviation_base}/airlines", params=params)
+    r.raise_for_status()
+    return r.json()
 
 
 if __name__ == "__main__":
