@@ -3,3 +3,5 @@ flask
 httpx
 mcp[cli]
 python-dotenv
+fastapi
+uvicorn
