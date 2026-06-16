@@ -9,20 +9,61 @@ import threading
 from pathlib import Path
 
 from flask import Flask, render_template, request, Response, stream_with_context
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 import anthropic
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+import psycopg2
+import psycopg2.extras
 import MCP.rag as rag
 
 import os
-from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent / ".env")
 
 app = Flask(__name__)
 async_client = anthropic.AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 SERVER_SCRIPT = str(Path(__file__).parent / "MCP" / "server.py")
 KNOWLEDGE_FILE = Path(__file__).parent / "MCP" / "knowledge.txt"
+_BOSSES_JSON = Path(__file__).parent / "API" / "data" / "bosses.json"
+
+
+def _seed_database() -> None:
+    """Create the bosses table if needed and seed it from bosses.json when empty."""
+    database_url = os.environ.get("DATABASE_URL")
+    if not database_url:
+        return
+    try:
+        from urllib.parse import urlparse
+        p = urlparse(database_url)
+        conn = psycopg2.connect(
+            host=p.hostname, port=p.port or 5432,
+            dbname=p.path.lstrip("/"), user=p.username, password=p.password,
+        )
+        conn.autocommit = True
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS bosses (
+                    id          TEXT PRIMARY KEY,
+                    name        TEXT NOT NULL,
+                    description TEXT,
+                    runes       INTEGER
+                )
+            """)
+            cur.execute("SELECT COUNT(*) FROM bosses")
+            if cur.fetchone()[0] == 0 and _BOSSES_JSON.exists():
+                bosses = json.loads(_BOSSES_JSON.read_text(encoding="utf-8"))
+                cur.executemany(
+                    "INSERT INTO bosses (id, name, description, runes) "
+                    "VALUES (%s, %s, %s, %s) ON CONFLICT (id) DO NOTHING",
+                    [(b["id"], b["name"], b.get("description"), b.get("runes")) for b in bosses],
+                )
+                print(f"Seeded {len(bosses)} bosses into the database.")
+        conn.close()
+    except Exception as exc:
+        print(f"Warning: database seed skipped — {exc}")
+
+
+_seed_database()
 
 # Build the RAG index once at startup
 _knowledge_text = KNOWLEDGE_FILE.read_text(encoding="utf-8") if KNOWLEDGE_FILE.exists() else ""

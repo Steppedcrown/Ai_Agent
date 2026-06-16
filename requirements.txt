@@ -8,3 +8,4 @@ uvicorn
 numpy
 sentence_transformers
 psycopg2-binary
+gunicorn

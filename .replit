@@ -57,4 +57,4 @@ exposeLocalhost = true
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["python", "app.py"]
+run = ["bash", "start.sh"]
