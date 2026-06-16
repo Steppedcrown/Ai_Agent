@@ -356,7 +356,7 @@
 
           if (data.type === 'text') {
             assistantText += data.content;
-            bubble.textContent = assistantText;
+            bubble.innerHTML = marked.parse(assistantText);
             bubble.appendChild(cursor);
             scrollToBottom();
 
