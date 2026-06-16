@@ -1,4 +1,4 @@
-# Test with: npx @modelcontextprotocol/inspector python server.py
+# Test with (from repo root): npx @modelcontextprotocol/inspector python MCP/server.py
 
 import httpx
 from mcp.server.fastmcp import FastMCP

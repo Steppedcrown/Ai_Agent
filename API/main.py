@@ -1,4 +1,4 @@
-# Run with: .venv\Scripts\uvicorn main:app --reload
+# Run with (from API/ dir): ..\\.venv\Scripts\uvicorn main:app --reload
 # Docs at:  http://127.0.0.1:8000/docs
 
 from fastapi import FastAPI
