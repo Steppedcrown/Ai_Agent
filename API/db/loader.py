@@ -1,16 +1,18 @@
-import json
-from pathlib import Path
-from typing import Any
-
-_cache: dict[str, list[Any]] = {}
-_DATA_DIR = Path(__file__).parent.parent / "data"
+import os
+import psycopg2
+import psycopg2.extras
+from urllib.parse import urlparse
 
 
-def json_loader(model: str) -> list[Any]:
-    if model not in _cache:
-        path = _DATA_DIR / f"{model}.json"
-        if not path.exists():
-            raise FileNotFoundError(f"No data file found for model '{model}' at {path}")
-        with open(path, encoding="utf-8") as f:
-            _cache[model] = json.load(f)
-    return _cache[model]
+def get_conn():
+    """Return a new psycopg2 connection using DATABASE_URL."""
+    url = os.environ["DATABASE_URL"]
+    parsed = urlparse(url)
+    return psycopg2.connect(
+        host=parsed.hostname,
+        port=parsed.port or 5432,
+        dbname=parsed.path.lstrip("/"),
+        user=parsed.username,
+        password=parsed.password,
+        cursor_factory=psycopg2.extras.RealDictCursor,
+    )

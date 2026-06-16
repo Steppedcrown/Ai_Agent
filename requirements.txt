@@ -7,12 +7,4 @@ fastapi
 uvicorn
 numpy
 sentence_transformers
-anthropic
-fastapi
-flask
-httpx
-mcp[cli]
-numpy
-python-dotenv
-sentence_transformers
-uvicorn
+psycopg2-binary
