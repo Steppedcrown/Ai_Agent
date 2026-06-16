@@ -13,7 +13,7 @@ from dotenv import dotenv_values
 import anthropic
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-import rag
+import My_MCP.MCP.rag as rag
 
 _env = dotenv_values(Path(__file__).parent / ".env")
 
