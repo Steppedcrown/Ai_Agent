@@ -13,14 +13,14 @@ from dotenv import dotenv_values
 import anthropic
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-import My_MCP.MCP.rag as rag
+import MCP.rag as rag
 
 _env = dotenv_values(Path(__file__).parent / ".env")
 
 app = Flask(__name__)
 async_client = anthropic.AsyncAnthropic(api_key=_env["ANTHROPIC_API_KEY"])
-SERVER_SCRIPT = str(Path(__file__).parent / "server.py")
-KNOWLEDGE_FILE = Path(__file__).parent / "knowledge.txt"
+SERVER_SCRIPT = str(Path(__file__).parent / "MCP" / "server.py")
+KNOWLEDGE_FILE = Path(__file__).parent / "MCP" / "knowledge.txt"
 
 # Build the RAG index once at startup
 _knowledge_text = KNOWLEDGE_FILE.read_text(encoding="utf-8") if KNOWLEDGE_FILE.exists() else ""

@@ -5,3 +5,5 @@ mcp[cli]
 python-dotenv
 fastapi
 uvicorn
+numpy
+sentence_transformers
