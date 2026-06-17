@@ -1,6 +1,8 @@
 .env
 .pythonlibs/
 .cache/
+.agents/
+attached_assets/
 
 # Python
 __pycache__/
