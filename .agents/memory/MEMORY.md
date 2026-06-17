@@ -1,1 +1,0 @@
-- [RAG startup CPU starvation](rag-startup-cpu-starvation.md) — sentence-transformer loading in a background thread starves gunicorn gthreads of GIL time; delay the build by 30s.
