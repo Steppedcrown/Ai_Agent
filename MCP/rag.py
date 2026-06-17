@@ -2,10 +2,18 @@ from __future__ import annotations
 
 import re
 import numpy as np
-from sentence_transformers import SentenceTransformer
 
-# Loaded once at import time; the model (~80 MB) is cached after first download
-_model = SentenceTransformer("all-MiniLM-L6-v2")
+# Lazy-loaded so importing this module doesn't block the server at startup.
+# The model (~80 MB) is cached on disk after first download.
+_model = None
+
+
+def _get_model():
+    global _model
+    if _model is None:
+        from sentence_transformers import SentenceTransformer
+        _model = SentenceTransformer("all-MiniLM-L6-v2")
+    return _model
 
 
 def _chunk(text: str) -> list[str]:
@@ -21,13 +29,13 @@ def _chunk(text: str) -> list[str]:
 def build_index(text: str) -> tuple[list[str], np.ndarray]:
     """Chunk *text* and return (chunks, L2-normalised embedding matrix)."""
     chunks = _chunk(text)
-    embeddings = _model.encode(chunks, normalize_embeddings=True)
+    embeddings = _get_model().encode(chunks, normalize_embeddings=True)
     return chunks, embeddings
 
 
 def retrieve(query: str, chunks: list[str], embeddings: np.ndarray, k: int = 2) -> list[str]:
     """Return the top-k chunks most semantically similar to *query*."""
-    q_emb = _model.encode([query], normalize_embeddings=True)
+    q_emb = _get_model().encode([query], normalize_embeddings=True)
     # Dot product of normalised vectors == cosine similarity
     scores = (embeddings @ q_emb.T).squeeze()
     top_k = min(k, len(chunks))
