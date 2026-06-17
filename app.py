@@ -65,9 +65,21 @@ def _seed_database() -> None:
 
 _seed_database()
 
-# Build the RAG index once at startup
-_knowledge_text = KNOWLEDGE_FILE.read_text(encoding="utf-8") if KNOWLEDGE_FILE.exists() else ""
-_rag_chunks, _rag_embeddings = rag.build_index(_knowledge_text) if _knowledge_text else ([], None)
+# Build the RAG index in a background thread so the server starts immediately
+# and passes the deployment healthcheck while the model loads in parallel.
+_rag_chunks: list = []
+_rag_embeddings = None
+
+
+def _build_rag_index() -> None:
+    global _rag_chunks, _rag_embeddings
+    knowledge_text = KNOWLEDGE_FILE.read_text(encoding="utf-8") if KNOWLEDGE_FILE.exists() else ""
+    if knowledge_text:
+        _rag_chunks, _rag_embeddings = rag.build_index(knowledge_text)
+        print("RAG index ready.")
+
+
+threading.Thread(target=_build_rag_index, daemon=True, name="rag-builder").start()
 
 _BASE_SYSTEM_PROMPT = """You are a knowledgeable and passionate Elden Ring player — a veteran of the Lands Between and the Shadow Realm. You have access to a database of Elden Ring bosses via MCP tools, and deep knowledge of combat strategy, lore, and game mechanics.
 
