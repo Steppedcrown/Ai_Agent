@@ -44,7 +44,7 @@ def _seed_database() -> None:
         with conn.cursor() as cur:
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS bosses (
-                    id          TEXT PRIMARY KEY,
+                    id          INTEGER PRIMARY KEY,
                     name        TEXT NOT NULL,
                     description TEXT,
                     runes       INTEGER

@@ -31,7 +31,7 @@ def make_router(model: str, search_field: str = "name") -> APIRouter:
         return {"data": driver.data, "success": True}
 
     @router.get("/{item_id}")
-    def get_item(item_id: str):
+    def get_item(item_id: int):
         driver = JSONDriver(model)
         driver.find_by_id(item_id)
         if driver.data is None:

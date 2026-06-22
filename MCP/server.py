@@ -22,7 +22,7 @@ def list_bosses(name: str = "") -> dict:
 
 
 @mcp.tool()
-def get_boss(boss_id: str) -> dict:
+def get_boss(boss_id: int) -> dict:
     """Return detailed information about a single Elden Ring boss by ID.
 
     Args:

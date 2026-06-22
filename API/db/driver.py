@@ -32,9 +32,9 @@ class JSONDriver:
                 self._params.append(v)
         return self
 
-    def find_by_id(self, id: str) -> "JSONDriver":
+    def find_by_id(self, id: int) -> "JSONDriver":
         self._wheres.append("id = %s")
-        self._params.append(str(id))
+        self._params.append(int(id))
         self._single = True
         return self
 
