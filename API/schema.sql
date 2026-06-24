@@ -2,6 +2,7 @@
 -- Tables are ordered to satisfy foreign key dependencies.
 -- Safe to re-run: all CREATE TABLE use IF NOT EXISTS,
 -- all ADD CONSTRAINT statements are guarded via DO blocks.
+-- Initial made with: https://drawsql.app
 
 CREATE TABLE IF NOT EXISTS "elden_ring" (
     "id"           INTEGER      NOT NULL,
