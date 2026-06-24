@@ -1,11 +1,11 @@
-CREATE TABLE "Elden Ring"(
+CREATE TABLE "elden_ring"(
     "id" INTEGER NOT NULL,
     "release_date" DATE NOT NULL,
     "developer" VARCHAR(255) NOT NULL,
     "publisher" VARCHAR(255) NOT NULL
 );
 ALTER TABLE
-    "Elden Ring" ADD PRIMARY KEY("id");
+    "elden_ring" ADD PRIMARY KEY("id");
 CREATE TABLE "boss"(
     "id" INTEGER NOT NULL,
     "game_id" INTEGER NOT NULL,
@@ -21,9 +21,7 @@ CREATE TABLE "remembrance"(
     "boss_id" INTEGER NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT NOT NULL,
-    "runes" INTEGER NOT NULL,
-    "reward_1" VARCHAR(255) NOT NULL,
-    "reward_2" VARCHAR(255) NOT NULL
+    "runes" INTEGER NOT NULL
 );
 ALTER TABLE
     "remembrance" ADD PRIMARY KEY("id");
@@ -43,7 +41,6 @@ ALTER TABLE
     "weapon" ADD PRIMARY KEY("id");
 CREATE TABLE "spell"(
     "id" INTEGER NOT NULL,
-    "class_id" INTEGER[] NOT NULL,
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT NOT NULL,
     "remembrance_id" INTEGER NULL,
@@ -54,6 +51,13 @@ CREATE TABLE "spell"(
 );
 ALTER TABLE
     "spell" ADD PRIMARY KEY("id");
+CREATE TABLE "spell_class"(
+    "spell_id" INTEGER NOT NULL,
+    "class_id" INTEGER NOT NULL,
+    PRIMARY KEY ("spell_id", "class_id"),
+    FOREIGN KEY("spell_id") REFERENCES "spell"("id"),
+    FOREIGN KEY("class_id") REFERENCES "weapon_class"("id")
+);
 CREATE TABLE "location"(
     "id" INTEGER NOT NULL,
     "title" VARCHAR(255) NOT NULL,
@@ -65,7 +69,7 @@ ALTER TABLE
     "location" ADD PRIMARY KEY("id");
 CREATE TABLE "weapon_class"(
     "id" INTEGER NOT NULL,
-    "class" VARCHAR(255) NOT NULL
+    "class_name" VARCHAR(255) NOT NULL
 );
 ALTER TABLE
     "weapon_class" ADD PRIMARY KEY("id");
@@ -74,7 +78,6 @@ CREATE TABLE "skill"(
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT NOT NULL,
     "fp_cost" INTEGER NOT NULL,
-    "compatible_classes" INTEGER[] NOT NULL,
     "remembrance_id" INTEGER NULL,
     "boss_id" INTEGER NULL,
     "location_id" INTEGER NULL,
@@ -83,6 +86,13 @@ CREATE TABLE "skill"(
 );
 ALTER TABLE
     "skill" ADD PRIMARY KEY("id");
+CREATE TABLE "skill_weapon_class"(
+    "skill_id" INTEGER NOT NULL,
+    "class_id" INTEGER NOT NULL,
+    PRIMARY KEY ("skill_id", "class_id"),
+    FOREIGN KEY("skill_id") REFERENCES "skill"("id"),
+    FOREIGN KEY("class_id") REFERENCES "weapon_class"("id")
+);
 CREATE TABLE "dungeon"(
     "id" INTEGER NOT NULL,
     "title" VARCHAR(255) NOT NULL,
@@ -163,19 +173,15 @@ ALTER TABLE
 ALTER TABLE
     "summon" ADD CONSTRAINT "summon_boss_id_foreign" FOREIGN KEY("boss_id") REFERENCES "boss"("id");
 ALTER TABLE
-    "skill" ADD CONSTRAINT "skill_compatible_classes_foreign" FOREIGN KEY("compatible_classes") REFERENCES "weapon_class"("id");
-ALTER TABLE
     "weapon" ADD CONSTRAINT "weapon_dungeon_id_foreign" FOREIGN KEY("dungeon_id") REFERENCES "dungeon"("id");
 ALTER TABLE
     "weapon" ADD CONSTRAINT "weapon_remembrance_id_foreign" FOREIGN KEY("remembrance_id") REFERENCES "remembrance"("id");
 ALTER TABLE
     "skill" ADD CONSTRAINT "skill_npc_id_foreign" FOREIGN KEY("npc_id") REFERENCES "npc"("id");
 ALTER TABLE
-    "spell" ADD CONSTRAINT "spell_class_id_foreign" FOREIGN KEY("class_id") REFERENCES "weapon_class"("id");
-ALTER TABLE
     "spell" ADD CONSTRAINT "spell_boss_id_foreign" FOREIGN KEY("boss_id") REFERENCES "boss"("id");
 ALTER TABLE
-    "boss" ADD CONSTRAINT "boss_game_id_foreign" FOREIGN KEY("game_id") REFERENCES "Elden Ring"("id");
+    "boss" ADD CONSTRAINT "boss_game_id_foreign" FOREIGN KEY("game_id") REFERENCES "elden_ring"("id");
 ALTER TABLE
     "reusable_item" ADD CONSTRAINT "reusable_item_remembrance_id_foreign" FOREIGN KEY("remembrance_id") REFERENCES "remembrance"("id");
 ALTER TABLE
@@ -192,3 +198,7 @@ ALTER TABLE
     "weapon" ADD CONSTRAINT "weapon_class_id_foreign" FOREIGN KEY("class_id") REFERENCES "weapon_class"("id");
 ALTER TABLE
     "spell" ADD CONSTRAINT "spell_remembrance_id_foreign" FOREIGN KEY("remembrance_id") REFERENCES "remembrance"("id");
+ALTER TABLE
+    "location" ADD CONSTRAINT "location_prev_location_id_foreign" FOREIGN KEY("prev_location_id") REFERENCES "location"("id");
+ALTER TABLE
+    "location" ADD CONSTRAINT "location_next_location_id_foreign" FOREIGN KEY("next_location_id") REFERENCES "location"("id");
