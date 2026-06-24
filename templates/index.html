@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Elden Ring Assistant</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -25,16 +32,28 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
       flex-shrink: 0;
     }
-    header .title { line-height: 1.2; }
-    header h1 { font-size: 1.15rem; font-weight: 700; }
-    header p  { font-size: 0.78rem; opacity: 0.8; margin-top: 2px; }
+
+    header .title {
+      line-height: 1.2;
+    }
+
+    header h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    header p {
+      font-size: 0.78rem;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
 
     #clear-btn {
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.35);
       color: #fff;
       padding: 6px 14px;
       border-radius: 20px;
@@ -43,7 +62,10 @@
       transition: background 0.2s;
       white-space: nowrap;
     }
-    #clear-btn:hover { background: rgba(255,255,255,0.28); }
+
+    #clear-btn:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
 
     /* ── Messages ── */
     .messages {
@@ -60,8 +82,14 @@
       display: flex;
       max-width: 78%;
     }
-    .msg.user      { align-self: flex-end; }
-    .msg.assistant { align-self: flex-start; }
+
+    .msg.user {
+      align-self: flex-end;
+    }
+
+    .msg.assistant {
+      align-self: flex-start;
+    }
 
     .bubble {
       padding: 11px 15px;
@@ -70,41 +98,78 @@
       font-size: 0.91rem;
       word-break: break-word;
     }
+
     .msg.user .bubble {
       background: #5b6ef5;
       color: #fff;
       border-bottom-right-radius: 4px;
     }
+
     .msg.assistant .bubble {
       background: #fff;
       color: #1a1a2e;
       border-bottom-left-radius: 4px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.09);
     }
 
     /* Markdown inside bubbles */
-    .bubble p { margin-bottom: 8px; }
-    .bubble p:last-child { margin-bottom: 0; }
-    .bubble ul, .bubble ol { margin: 6px 0 6px 18px; }
-    .bubble li { margin-bottom: 3px; }
-    .bubble strong { font-weight: 600; }
-    .bubble em { font-style: italic; }
-    .bubble h1, .bubble h2, .bubble h3 {
+    .bubble p {
+      margin-bottom: 8px;
+    }
+
+    .bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .bubble ul,
+    .bubble ol {
+      margin: 6px 0 6px 18px;
+    }
+
+    .bubble li {
+      margin-bottom: 3px;
+    }
+
+    .bubble strong {
+      font-weight: 600;
+    }
+
+    .bubble em {
+      font-style: italic;
+    }
+
+    .bubble h1,
+    .bubble h2,
+    .bubble h3 {
       margin: 10px 0 6px;
       font-weight: 700;
       line-height: 1.3;
     }
-    .bubble h1 { font-size: 1.1em; }
-    .bubble h2 { font-size: 1.0em; }
-    .bubble h3 { font-size: 0.95em; }
+
+    .bubble h1 {
+      font-size: 1.1em;
+    }
+
+    .bubble h2 {
+      font-size: 1.0em;
+    }
+
+    .bubble h3 {
+      font-size: 0.95em;
+    }
+
     .bubble code {
-      background: rgba(0,0,0,0.06);
+      background: rgba(0, 0, 0, 0.06);
       padding: 1px 5px;
       border-radius: 4px;
       font-family: 'Menlo', 'Consolas', monospace;
       font-size: 0.86em;
     }
-    .msg.user .bubble code { background: rgba(255,255,255,0.22); }
+
+    .msg.user .bubble code {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
     .bubble pre {
       background: #f5f5f5;
       border-radius: 8px;
@@ -112,10 +177,29 @@
       overflow-x: auto;
       margin: 8px 0;
     }
-    .bubble pre code { background: none; padding: 0; }
-    .bubble table { border-collapse: collapse; margin: 8px 0; font-size: 0.88em; }
-    .bubble th, .bubble td { border: 1px solid #ddd; padding: 5px 10px; text-align: left; }
-    .bubble th { background: #f0f2f5; font-weight: 600; }
+
+    .bubble pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .bubble table {
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 0.88em;
+    }
+
+    .bubble th,
+    .bubble td {
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+      text-align: left;
+    }
+
+    .bubble th {
+      background: #f0f2f5;
+      font-weight: 600;
+    }
 
     /* Tool use indicators */
     .tool-row {
@@ -130,6 +214,7 @@
       border-radius: 12px;
       transition: opacity 0.3s;
     }
+
     .tool-row .spinner {
       width: 11px;
       height: 11px;
@@ -139,10 +224,21 @@
       animation: spin 0.75s linear infinite;
       flex-shrink: 0;
     }
-    .tool-row.done { color: #4caf50; background: #e8f5e9; }
-    .tool-row.done .spinner { display: none; }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .tool-row.done {
+      color: #4caf50;
+      background: #e8f5e9;
+    }
+
+    .tool-row.done .spinner {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* Blinking cursor during streaming */
     .cursor {
@@ -155,7 +251,18 @@
       vertical-align: text-bottom;
       margin-left: 1px;
     }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
 
     /* ── Input area ── */
     .input-area {
@@ -167,6 +274,7 @@
       align-items: flex-end;
       flex-shrink: 0;
     }
+
     textarea {
       flex: 1;
       padding: 10px 14px;
@@ -181,8 +289,14 @@
       transition: border-color 0.2s;
       overflow-y: auto;
     }
-    textarea:focus { border-color: #5b6ef5; }
-    textarea::placeholder { color: #aaa; }
+
+    textarea:focus {
+      border-color: #5b6ef5;
+    }
+
+    textarea::placeholder {
+      color: #aaa;
+    }
 
     #send-btn {
       width: 42px;
@@ -198,200 +312,221 @@
       flex-shrink: 0;
       transition: background 0.2s, transform 0.1s;
     }
-    #send-btn:hover:not(:disabled) { background: #4a5ce0; }
-    #send-btn:active:not(:disabled) { transform: scale(0.93); }
-    #send-btn:disabled { background: #c5cae9; cursor: not-allowed; }
-    #send-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+    #send-btn:hover:not(:disabled) {
+      background: #4a5ce0;
+    }
+
+    #send-btn:active:not(:disabled) {
+      transform: scale(0.93);
+    }
+
+    #send-btn:disabled {
+      background: #c5cae9;
+      cursor: not-allowed;
+    }
+
+    #send-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
   </style>
 </head>
+
 <body>
 
-<header>
-  <div class="title">
-    <h1>Elden Ring Assistant</h1>
-    <p>Boss strategies &amp; lore powered by Claude</p>
+  <header>
+    <div class="title">
+      <h1>Elden Ring Assistant</h1>
+      <p>Boss strategies &amp; lore powered by Claude</p>
+    </div>
+    <button id="clear-btn">New Chat</button>
+  </header>
+
+  <div class="messages" id="messages">
+    <div class="msg assistant">
+      <div class="bubble">Greetings, Tarnished. I can help you with Elden Ring: Shadow of the Erdtree bosses, items,
+        lore, and lots more. Don't know where to start? Ask me about what bosses I have information on!</div>
+    </div>
   </div>
-  <button id="clear-btn">New Chat</button>
-</header>
 
-<div class="messages" id="messages">
-  <div class="msg assistant">
-    <div class="bubble">Greetings, Tarnished. I can help you with Elden Ring boss strategies, lore, and rune rewards — especially from the Shadow of the Erdtree DLC. Which boss are you up against? Don't know where to start? Ask me about what bosses I have information on!</div>
+  <div class="input-area">
+    <textarea id="input" placeholder="Ask about a boss, build, or lore..." rows="1"></textarea>
+    <button id="send-btn" title="Send (Enter)">
+      <svg viewBox="0 0 24 24">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+      </svg>
+    </button>
   </div>
-</div>
 
-<div class="input-area">
-  <textarea id="input" placeholder="Ask about a boss, build, or lore..." rows="1"></textarea>
-  <button id="send-btn" title="Send (Enter)">
-    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-  </button>
-</div>
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('input');
+    const sendBtn = document.getElementById('send-btn');
+    const clearBtn = document.getElementById('clear-btn');
 
-<script>
-  const messagesEl = document.getElementById('messages');
-  const inputEl    = document.getElementById('input');
-  const sendBtn    = document.getElementById('send-btn');
-  const clearBtn   = document.getElementById('clear-btn');
+    // Configure marked
+    marked.setOptions({breaks: true, gfm: true});
 
-  // Configure marked
-  marked.setOptions({ breaks: true, gfm: true });
+    let history = [];   // [{role, content}] — text only
+    let isStreaming = false;
 
-  let history     = [];   // [{role, content}] — text only
-  let isStreaming = false;
+    /* ── Auto-resize textarea ── */
+    inputEl.addEventListener('input', () => {
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 130) + 'px';
+    });
 
-  /* ── Auto-resize textarea ── */
-  inputEl.addEventListener('input', () => {
-    inputEl.style.height = 'auto';
-    inputEl.style.height = Math.min(inputEl.scrollHeight, 130) + 'px';
-  });
+    /* ── Keyboard shortcuts ── */
+    inputEl.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (!isStreaming) sendMessage();
+      }
+    });
 
-  /* ── Keyboard shortcuts ── */
-  inputEl.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (!isStreaming) sendMessage();
-    }
-  });
+    sendBtn.addEventListener('click', () => {if (!isStreaming) sendMessage();});
 
-  sendBtn.addEventListener('click', () => { if (!isStreaming) sendMessage(); });
-
-  clearBtn.addEventListener('click', () => {
-    if (isStreaming) return;
-    history = [];
-    messagesEl.innerHTML = `
+    clearBtn.addEventListener('click', () => {
+      if (isStreaming) return;
+      history = [];
+      messagesEl.innerHTML = `
       <div class="msg assistant">
-        <div class="bubble">Greetings, Tarnished. I can help you with Elden Ring boss strategies, lore, and rune rewards — especially from the Shadow of the Erdtree DLC. Which boss are you up against? Don't know where to start? Ask me about what bosses I have information on!</div>
+        <div class="bubble">Greetings, Tarnished. I can help you with Elden Ring: Shadow of the Erdtree bosses, items, lore, and lots more. Don't know where to start? Ask me about what bosses I have information on!
+</div>
       </div>`;
-  });
+    });
 
-  /* ── Helpers ── */
-  function scrollToBottom() {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
+    /* ── Helpers ── */
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
 
-  function addUserMessage(text) {
-    const el = document.createElement('div');
-    el.className = 'msg user';
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.textContent = text;
-    el.appendChild(bubble);
-    messagesEl.appendChild(el);
-    scrollToBottom();
-  }
+    function addUserMessage(text) {
+      const el = document.createElement('div');
+      el.className = 'msg user';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.textContent = text;
+      el.appendChild(bubble);
+      messagesEl.appendChild(el);
+      scrollToBottom();
+    }
 
-  function createAssistantBubble() {
-    const el = document.createElement('div');
-    el.className = 'msg assistant';
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    el.appendChild(bubble);
-    messagesEl.appendChild(el);
-    scrollToBottom();
-    return bubble;
-  }
+    function createAssistantBubble() {
+      const el = document.createElement('div');
+      el.className = 'msg assistant';
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      el.appendChild(bubble);
+      messagesEl.appendChild(el);
+      scrollToBottom();
+      return bubble;
+    }
 
-  function createToolRow(toolName) {
-    const el = document.createElement('div');
-    el.className = 'tool-row';
-    el.innerHTML = `<div class="spinner"></div><span>Calling <strong>${toolName}</strong>…</span>`;
-    messagesEl.appendChild(el);
-    scrollToBottom();
-    return el;
-  }
+    function createToolRow(toolName) {
+      const el = document.createElement('div');
+      el.className = 'tool-row';
+      el.innerHTML = `<div class="spinner"></div><span>Calling <strong>${toolName}</strong>…</span>`;
+      messagesEl.appendChild(el);
+      scrollToBottom();
+      return el;
+    }
 
-  function finishToolRow(el, toolName) {
-    el.classList.add('done');
-    el.innerHTML = `<span>✓ ${toolName} complete</span>`;
-    setTimeout(() => el.remove(), 2000);
-  }
+    function finishToolRow(el, toolName) {
+      el.classList.add('done');
+      el.innerHTML = `<span>✓ ${toolName} complete</span>`;
+      setTimeout(() => el.remove(), 2000);
+    }
 
-  /* ── Main send function ── */
-  async function sendMessage() {
-    const text = inputEl.value.trim();
-    if (!text || isStreaming) return;
+    /* ── Main send function ── */
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text || isStreaming) return;
 
-    inputEl.value = '';
-    inputEl.style.height = 'auto';
-    isStreaming = true;
-    sendBtn.disabled = true;
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+      isStreaming = true;
+      sendBtn.disabled = true;
 
-    addUserMessage(text);
-    history.push({ role: 'user', content: text });
+      addUserMessage(text);
+      history.push({role: 'user', content: text});
 
-    // Create the streaming bubble + cursor
-    const bubble = createAssistantBubble();
-    const cursor = document.createElement('span');
-    cursor.className = 'cursor';
-    bubble.appendChild(cursor);
+      // Create the streaming bubble + cursor
+      const bubble = createAssistantBubble();
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      bubble.appendChild(cursor);
 
-    let assistantText = '';
-    const toolRowMap  = {};   // toolName -> DOM element
+      let assistantText = '';
+      const toolRowMap = {};   // toolName -> DOM element
 
-    try {
-      const resp = await fetch('/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
-      });
+      try {
+        const resp = await fetch('/chat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({messages: history}),
+        });
 
-      if (!resp.ok) throw new Error(`Server error: ${resp.status}`);
+        if (!resp.ok) throw new Error(`Server error: ${resp.status}`);
 
-      const reader  = resp.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer    = '';
+        const reader = resp.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+        while (true) {
+          const {done, value} = await reader.read();
+          if (done) break;
 
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop(); // retain incomplete line
+          buffer += decoder.decode(value, {stream: true});
+          const lines = buffer.split('\n');
+          buffer = lines.pop(); // retain incomplete line
 
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          let data;
-          try { data = JSON.parse(line.slice(6)); } catch { continue; }
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            let data;
+            try {data = JSON.parse(line.slice(6));} catch {continue;}
 
-          if (data.type === 'text') {
-            assistantText += data.content;
-            bubble.innerHTML = marked.parse(assistantText);
-            bubble.appendChild(cursor);
-            scrollToBottom();
+            if (data.type === 'text') {
+              assistantText += data.content;
+              bubble.innerHTML = marked.parse(assistantText);
+              bubble.appendChild(cursor);
+              scrollToBottom();
 
-          } else if (data.type === 'tool_use') {
-            const row = createToolRow(data.name);
-            toolRowMap[data.name] = row;
+            } else if (data.type === 'tool_use') {
+              const row = createToolRow(data.name);
+              toolRowMap[data.name] = row;
 
-          } else if (data.type === 'tool_done') {
-            const row = toolRowMap[data.name];
-            if (row) finishToolRow(row, data.name);
+            } else if (data.type === 'tool_done') {
+              const row = toolRowMap[data.name];
+              if (row) finishToolRow(row, data.name);
 
-          } else if (data.type === 'error') {
-            cursor.remove();
-            bubble.textContent = `Error: ${data.message}`;
-            bubble.style.color = '#c62828';
-            scrollToBottom();
+            } else if (data.type === 'error') {
+              cursor.remove();
+              bubble.textContent = `Error: ${data.message}`;
+              bubble.style.color = '#c62828';
+              scrollToBottom();
 
-          } else if (data.type === 'done') {
-            cursor.remove();
-            bubble.innerHTML = marked.parse(assistantText || '*(no response)*');
-            history.push({ role: 'assistant', content: assistantText });
-            scrollToBottom();
+            } else if (data.type === 'done') {
+              cursor.remove();
+              bubble.innerHTML = marked.parse(assistantText || '*(no response)*');
+              history.push({role: 'assistant', content: assistantText});
+              scrollToBottom();
+            }
           }
         }
+      } catch (err) {
+        cursor.remove();
+        bubble.textContent = 'Something went wrong. Please try again.';
+        console.error(err);
       }
-    } catch (err) {
-      cursor.remove();
-      bubble.textContent = 'Something went wrong. Please try again.';
-      console.error(err);
-    }
 
-    isStreaming = false;
-    sendBtn.disabled = false;
-    inputEl.focus();
-  }
-</script>
+      isStreaming = false;
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+  </script>
 </body>
+
 </html>
