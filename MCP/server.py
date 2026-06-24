@@ -11,7 +11,7 @@ def list_bosses(name: str = "") -> dict:
 
     Args:
         name: Optional partial name to search for (case-insensitive). Leave empty to list all.
-    Returns a dict with a 'data' list of boss objects, each containing id, name, description, and runes.
+    Returns a dict with a 'data' list of boss objects, each containing id, title, description, and runes.
     """
     params = {}
     if name:
@@ -27,7 +27,7 @@ def get_boss(boss_id: int) -> dict:
 
     Args:
         boss_id: The numeric ID of the boss (use list_bosses to find IDs).
-    Returns a dict with 'data' containing id, name, description, and runes reward.
+    Returns a dict with 'data' containing id, title, description, and runes reward.
     """
     r = httpx.get(f"{_API_BASE}/bosses/{boss_id}")
     r.raise_for_status()

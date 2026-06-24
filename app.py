@@ -43,18 +43,18 @@ def _seed_database() -> None:
         conn.autocommit = True
         with conn.cursor() as cur:
             cur.execute("""
-                CREATE TABLE IF NOT EXISTS bosses (
+                CREATE TABLE IF NOT EXISTS boss (
                     id          INTEGER PRIMARY KEY,
-                    name        TEXT NOT NULL,
+                    title       TEXT NOT NULL,
                     description TEXT,
                     runes       INTEGER
                 )
             """)
-            cur.execute("SELECT COUNT(*) FROM bosses")
+            cur.execute("SELECT COUNT(*) FROM boss")
             if cur.fetchone()[0] == 0 and _BOSSES_JSON.exists():
                 bosses = json.loads(_BOSSES_JSON.read_text(encoding="utf-8"))
                 cur.executemany(
-                    "INSERT INTO bosses (id, name, description, runes) "
+                    "INSERT INTO boss (id, title, description, runes) "
                     "VALUES (%s, %s, %s, %s) ON CONFLICT (id) DO NOTHING",
                     [(b["id"], b["name"], b.get("description"), b.get("runes")) for b in bosses],
                 )

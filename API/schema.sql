@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS "npc" (
 
 CREATE TABLE IF NOT EXISTS "boss" (
     "id"          INTEGER      NOT NULL,
-    "game_id"     INTEGER      NOT NULL,
+    "game_id"     INTEGER      NULL,
     "title"       VARCHAR(255) NOT NULL,
     "description" TEXT         NOT NULL,
-    "location_id" INTEGER      NOT NULL,
+    "location_id" INTEGER      NULL,
     "runes"       INTEGER      NOT NULL,
     PRIMARY KEY ("id")
 );

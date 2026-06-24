@@ -1,3 +1,3 @@
-from ._base import make_router
+from .bosses import router as bosses_router
 
-__all__ = ["make_router"]
+__all__ = ["bosses_router"]
