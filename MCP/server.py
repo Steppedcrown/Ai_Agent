@@ -1,5 +1,6 @@
 import httpx
 from mcp.server.fastmcp import FastMCP
+from VectorDB.search import semantic_search as _semantic_search, VALID_ENTITY_TYPES
 
 mcp = FastMCP("elden-ring-mcp")
 _API = "http://localhost:8000"
@@ -282,6 +283,33 @@ def get_summon(summon_id: int) -> dict:
     and source FKs (boss_id, location_id, dungeon_id, npc_id).
     """
     return _get(f"/summons/{summon_id}")
+
+
+# ── Vector / Semantic Search ──────────────────────────────────────────────────
+
+@mcp.tool()
+def semantic_search(query: str, entity_type: str = "", n_results: int = 5) -> list:
+    """Search across all Elden Ring DLC data using semantic similarity.
+
+    Use this when the user asks a conceptual or descriptive question that doesn't
+    map cleanly to a specific boss or item name — e.g. "what weapons scale with
+    intelligence", "fire-resistant bosses", "NPCs with tragic questlines", or
+    "skills good for strength builds".
+
+    Args:
+        query:       Natural-language description of what to search for.
+        entity_type: Optional. Restrict results to one entity type. Must be one of:
+                     bosses, locations, npcs, remembrances, reusable_items,
+                     skills, spells, summons, weapons, dungeons.
+                     Leave empty to search across all types.
+        n_results:   Number of results to return (default 5, max 20).
+
+    Returns a list of matching entities, each with: score (0–1 similarity),
+    entity_type, entity_id, title, document (text used for embedding), and
+    any extra metadata (runes, fp_cost, etc.).
+    """
+    n_results = min(max(1, n_results), 20)
+    return _semantic_search(query, entity_type=entity_type, n_results=n_results)
 
 
 if __name__ == "__main__":

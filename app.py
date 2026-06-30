@@ -17,6 +17,7 @@ from mcp.client.stdio import stdio_client
 import psycopg2
 import psycopg2.extras
 import MCP.rag as rag
+from VectorDB.populate import populate as _populate_chroma
 
 import os
 load_dotenv(Path(__file__).parent / ".env")
@@ -80,6 +81,10 @@ def _build_rag_index() -> None:
     if knowledge_text:
         _rag_chunks, _rag_embeddings = rag.build_index(knowledge_text)
         print("RAG index ready.")
+    try:
+        _populate_chroma()
+    except Exception as exc:
+        print(f"Warning: Chroma populate skipped — {exc}")
 
 
 threading.Thread(target=_build_rag_index, daemon=True, name="rag-builder").start()
