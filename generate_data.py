@@ -15,8 +15,11 @@ Usage:
     pip install anthropic requests python-dotenv
     export ANTHROPIC_API_KEY=your-key
     python generate_data.py
+    python generate_data.py --clear       # delete all JSON files in data/ first
+    python generate_data.py --overwrite   # regenerate all tables, overwriting existing files
 """
 
+import argparse
 import json
 import os
 import re
@@ -747,8 +750,28 @@ def process_table(
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Elden Ring: Shadow of the Erdtree — Data Generator")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "--clear",
+        action="store_true",
+        help="Delete all JSON files in data/ before generating.",
+    )
+    group.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Regenerate all tables even if their JSON files already exist.",
+    )
+    args = parser.parse_args()
+
     print("Elden Ring: Shadow of the Erdtree — Data Generator")
     print("=" * 60)
+
+    if args.clear:
+        print("--clear: removing all JSON files from data/")
+        for f in DATA_DIR.glob("*.json"):
+            f.unlink()
+            print(f"  Deleted {f.name}")
 
     existing_data = load_existing_data()
     print(f"Loaded existing data for: {list(existing_data.keys()) or 'none'}")
@@ -756,7 +779,7 @@ def main():
     all_tables = TABLES + JUNCTION_TABLES
 
     for table in all_tables:
-        if table["name"] in existing_data:
+        if not args.overwrite and not args.clear and table["name"] in existing_data:
             print(
                 f"\nSkipping {table['name']} — already exists "
                 f"({len(existing_data[table['name']])} records)"
