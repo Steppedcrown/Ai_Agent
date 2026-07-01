@@ -27,7 +27,7 @@ def make_router(
     @router.get("")
     def list_items(
         page: int = Query(0, ge=0, description="Zero-based page index"),
-        limit: int = Query(20, ge=1, le=100, description="Items per page"),
+        limit: int = Query(200, ge=1, le=500, description="Items per page"),
         search: Optional[str] = Query(None, description=f"Search by {search_field}"),
     ):
         driver = JSONDriver(table)

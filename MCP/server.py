@@ -35,7 +35,7 @@ def list_bosses(search: str = "") -> dict:
         search: Partial name to search for (case-insensitive). Leave empty to list all.
     Returns a dict with 'data' list of boss objects (id, title, description, runes, location_id).
     """
-    return _get("/bosses", search=search)
+    return _get("/bosses", search=search, limit=500)
 
 
 @mcp.tool()
@@ -60,7 +60,7 @@ def list_locations(search: str = "") -> dict:
     Returns a dict with 'data' list of location objects (id, title, description,
     prev_location_id, next_location_id).
     """
-    return _get("/locations", search=search)
+    return _get("/locations", search=search, limit=500)
 
 
 @mcp.tool()
@@ -84,7 +84,7 @@ def list_npcs(search: str = "") -> dict:
         search: Partial NPC name to search for. Leave empty to list all.
     Returns a dict with 'data' list of NPC objects (id, title, quest_description, initial_location_id).
     """
-    return _get("/npcs", search=search)
+    return _get("/npcs", search=search, limit=500)
 
 
 @mcp.tool()
@@ -108,7 +108,7 @@ def list_dungeons(search: str = "") -> dict:
         search: Partial dungeon name to search for. Leave empty to list all.
     Returns a dict with 'data' list of dungeon objects (id, title, location_id, is_legacy, boss_id).
     """
-    return _get("/dungeons", search=search)
+    return _get("/dungeons", search=search, limit=500)
 
 
 @mcp.tool()
@@ -132,7 +132,7 @@ def list_remembrances(search: str = "") -> dict:
         search: Partial remembrance title to search for. Leave empty to list all.
     Returns a dict with 'data' list of remembrance objects (id, title, description, boss_id, runes).
     """
-    return _get("/remembrances", search=search)
+    return _get("/remembrances", search=search, limit=500)
 
 
 @mcp.tool()
@@ -156,7 +156,7 @@ def list_weapon_classes(search: str = "") -> dict:
         search: Partial class name to search for. Leave empty to list all.
     Returns a dict with 'data' list of weapon class objects (id, class_name).
     """
-    return _get("/weapon-classes", search=search)
+    return _get("/weapon-classes", search=search, limit=500)
 
 
 @mcp.tool()
@@ -181,7 +181,7 @@ def list_weapons(search: str = "") -> dict:
     Returns a dict with 'data' list of weapon objects (id, title, description, class_id,
     is_somber, and source FK: remembrance_id / boss_id / location_id / dungeon_id / npc_id).
     """
-    return _get("/weapons", search=search)
+    return _get("/weapons", search=search, limit=500)
 
 
 @mcp.tool()
@@ -206,7 +206,7 @@ def list_spells(search: str = "") -> dict:
         search: Partial spell name to search for. Leave empty to list all.
     Returns a dict with 'data' list of spell objects (id, title, description, and source FKs).
     """
-    return _get("/spells", search=search)
+    return _get("/spells", search=search, limit=500)
 
 
 @mcp.tool()
@@ -231,7 +231,7 @@ def list_skills(search: str = "") -> dict:
         search: Partial skill name to search for. Leave empty to list all.
     Returns a dict with 'data' list of skill objects (id, title, description, fp_cost, and source FKs).
     """
-    return _get("/skills", search=search)
+    return _get("/skills", search=search, limit=500)
 
 
 @mcp.tool()
@@ -258,7 +258,7 @@ def list_consumables(search: str = "") -> dict:
     Returns a dict with 'data' list of consumable objects (id, title, description,
     and source FKs: location_id, dungeon_id, npc_id, boss_id).
     """
-    return _get("/consumables", search=search)
+    return _get("/consumables", search=search, limit=500)
 
 
 @mcp.tool()
@@ -284,7 +284,7 @@ def list_talismans(search: str = "") -> dict:
     Returns a dict with 'data' list of talisman objects (id, title, description,
     and source FKs: location_id, dungeon_id, npc_id, boss_id, remembrance_id).
     """
-    return _get("/talismans", search=search)
+    return _get("/talismans", search=search, limit=500)
 
 
 @mcp.tool()
@@ -310,7 +310,7 @@ def list_armor_sets(search: str = "") -> dict:
     Returns a dict with 'data' list of armor set objects (id, title, description,
     and source FKs: location_id, dungeon_id, npc_id, boss_id).
     """
-    return _get("/armor-sets", search=search)
+    return _get("/armor-sets", search=search, limit=500)
 
 
 @mcp.tool()
@@ -337,7 +337,7 @@ def list_armor_pieces(search: str = "") -> dict:
     Returns a dict with 'data' list of armor piece objects (id, title, description,
     slot, set_id).
     """
-    return _get("/armor-pieces", search=search)
+    return _get("/armor-pieces", search=search, limit=500)
 
 
 @mcp.tool()
@@ -362,7 +362,7 @@ def list_summons(search: str = "") -> dict:
     Returns a dict with 'data' list of summon objects (id, title, description,
     fp_cost, hp_cost, source FKs).
     """
-    return _get("/summons", search=search)
+    return _get("/summons", search=search, limit=500)
 
 
 @mcp.tool()
