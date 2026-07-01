@@ -52,6 +52,8 @@ Three processes run independently:
 pip install -r requirements.txt
 ```
 
+> If you plan to use vector search, also install chromadb separately: `pip install chromadb` (it is intentionally excluded from `requirements.txt` as it is optional and can block deployment builds).
+
 ### 2. Environment variables
 
 Create a `.env` file in the project root (or set these as environment secrets):

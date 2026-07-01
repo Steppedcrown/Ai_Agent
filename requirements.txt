@@ -1,5 +1,4 @@
 anthropic
-chromadb
 flask
 httpx
 mcp[cli]
