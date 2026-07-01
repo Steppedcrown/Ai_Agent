@@ -62,6 +62,21 @@ ANTHROPIC_API_KEY=your-api-key-here
 
 The database connection is read from `DATABASE_URL` (set automatically on Replit, or configure it yourself for local development).
 
+#### Enabling semantic / vector search (optional)
+
+Vector search uses [ChromaDB](https://www.trychroma.com/) and is **disabled by default**. To enable it:
+
+1. Install chromadb:
+   ```bash
+   pip install chromadb
+   ```
+2. Set the environment variable:
+   ```
+   VECTORDB_ENABLED=1
+   ```
+
+When enabled, the app embeds all game entities into a local Chroma collection on startup and the `semantic_search` MCP tool becomes available for conceptual queries (e.g. "intelligence-scaling weapons", "bosses weak to bleed"). Without it, all other tools work normally.
+
 ### 3. Seed the database
 
 The boss table needs to exist before the API will work. Connect to your PostgreSQL database and run:
