@@ -89,11 +89,14 @@ def main():
             seed(cur, "remembrance", load("remembrances.json"), "id")
 
             # Tier 4 — depends on tiers 1-3
-            seed(cur, "spell",        load("spells.json"),        "id")
-            seed(cur, "skill",        load("skills.json"),        "id")
-            seed(cur, "weapon",       load("weapons.json"),       "id")
-            seed(cur, "reusable_item", load("reusable_items.json"), "id")
-            seed(cur, "summon",       load("summons.json"),       "id")
+            seed(cur, "spell",      load("spells.json"),      "id")
+            seed(cur, "skill",      load("skills.json"),       "id")
+            seed(cur, "weapon",     load("weapons.json"),      "id")
+            seed(cur, "consumable", load("consumables.json"),  "id")
+            seed(cur, "talisman",   load("talismans.json"),    "id")
+            seed(cur, "armor_set",  load("armor_sets.json"),   "id")
+            seed(cur, "armor_piece", load("armor_pieces.json"), "id")
+            seed(cur, "summon",     load("summons.json"),      "id")
 
             # Tier 5 — junction tables
             seed(cur, "spell_class",       load("spell_classes.json"),       ("spell_id", "class_id"))

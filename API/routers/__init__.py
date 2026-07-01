@@ -9,7 +9,10 @@ weapon_classes_router = make_router("weapon-classes", search_field="class_name",
 weapons_router = make_router("weapons", search_field="title", table="weapon")
 spells_router = make_router("spells", search_field="title", table="spell")
 skills_router = make_router("skills", search_field="title", table="skill")
-reusable_items_router = make_router("reusable-items", search_field="title", table="reusable_item", tag="Reusable Items")
+consumables_router = make_router("consumables", search_field="title", table="consumable")
+talismans_router = make_router("talismans", search_field="title", table="talisman")
+armor_sets_router = make_router("armor-sets", search_field="title", table="armor_set", tag="Armor Sets")
+armor_pieces_router = make_router("armor-pieces", search_field="title", table="armor_piece", tag="Armor Pieces")
 summons_router = make_router("summons", search_field="title", table="summon")
 
 all_routers = [
@@ -22,6 +25,9 @@ all_routers = [
     weapons_router,
     spells_router,
     skills_router,
-    reusable_items_router,
+    consumables_router,
+    talismans_router,
+    armor_sets_router,
+    armor_pieces_router,
     summons_router,
 ]
