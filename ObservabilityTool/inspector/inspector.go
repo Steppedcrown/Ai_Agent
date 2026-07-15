@@ -112,12 +112,17 @@ func (ins *Inspector) Inspect(bodyBytes []byte, path string, flaggedTerms []stri
         }
 }
 
-// LogUserPrompt records a user message sent to the chatbot.
-func (ins *Inspector) LogUserPrompt(content string) {
+// LogUserPrompt records a user message and flags any matching terms.
+func (ins *Inspector) LogUserPrompt(content string, flaggedTerms []string) {
+        found := matchFlaggedTerms(content, flaggedTerms)
         ins.emit(Event{
-                EventType: EventUserPrompt,
-                Content:   truncate(content, 500),
+                EventType:    EventUserPrompt,
+                Content:      truncate(content, 500),
+                FlaggedTerms: found,
         })
+        if len(found) > 0 {
+                log.Printf("[inspector] FLAGGED user prompt — matched terms: %v", found)
+        }
 }
 
 // LogCompletion records the HTTP response metadata once the round-trip ends.

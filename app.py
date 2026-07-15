@@ -260,7 +260,7 @@ def _log_user_prompt(content: str) -> None:
     try:
         payload = json.dumps({"content": content}).encode()
         req = urllib.request.Request(
-            "http://localhost:9001/event",
+            "http://localhost:3001/event",
             data=payload,
             headers={"Content-Type": "application/json"},
             method="POST",
