@@ -15,7 +15,7 @@ else:
     VALID_ENTITY_TYPES = set()
 
 mcp = FastMCP("elden-ring-mcp")
-_API = os.environ.get("MCP_API_URL", "http://localhost:8000")
+_API = "http://localhost:9001"
 
 
 def _get(path: str, **params) -> dict:

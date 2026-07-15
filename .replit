@@ -5,7 +5,6 @@ stack = "BEST_EFFORT_FALLBACK"
 
 [nix]
 channel = "stable-25_05"
-packages = ["u-root-cmds"]
 
 [workflows]
 runButton = "Project"
