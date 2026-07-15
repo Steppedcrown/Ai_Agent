@@ -22,6 +22,10 @@ args = "Start application"
 task = "workflow.run"
 args = "Elden Ring API"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "ObservabilityTool"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -46,6 +50,22 @@ waitForPort = 8000
 [workflows.workflow.metadata]
 outputType = "console"
 
+[[workflows.workflow]]
+name = "ObservabilityTool"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ObservabilityTool && go run ."
+waitForPort = 3001
+
+[[ports]]
+localPort = 3001
+externalPort = 3001
+
 [[ports]]
 localPort = 5000
 externalPort = 80
@@ -58,10 +78,6 @@ exposeLocalhost = true
 [[ports]]
 localPort = 9000
 externalPort = 9000
-
-[[ports]]
-localPort = 9001
-externalPort = 3001
 
 [deployment]
 deploymentTarget = "autoscale"

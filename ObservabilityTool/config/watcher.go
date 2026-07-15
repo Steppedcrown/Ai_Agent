@@ -25,7 +25,7 @@ type AgentConfig struct {
 func defaults() AgentConfig {
         return AgentConfig{
                 MCPServerURL: "http://localhost:8000",
-                ListenPort:   9001,
+                ListenPort:   3001,
                 FlaggedTerms: []string{},
         }
 }
