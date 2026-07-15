@@ -55,6 +55,10 @@ localPort = 8000
 externalPort = 8000
 exposeLocalhost = true
 
+[[ports]]
+localPort = 9000
+externalPort = 9000
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "start.sh"]
