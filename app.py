@@ -7,6 +7,7 @@ import queue
 import sys
 import threading
 import time
+import urllib.request
 from pathlib import Path
 
 from flask import Flask, render_template, request, Response, stream_with_context
@@ -255,10 +256,28 @@ def index():
     return render_template("index.html")
 
 
+def _log_user_prompt(content: str) -> None:
+    try:
+        payload = json.dumps({"content": content}).encode()
+        req = urllib.request.Request(
+            "http://localhost:9001/event",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        urllib.request.urlopen(req, timeout=0.5)
+    except Exception:
+        pass
+
+
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
     messages = data.get("messages", [])
+
+    user_text = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "")
+    if user_text:
+        threading.Thread(target=_log_user_prompt, args=(user_text,), daemon=True).start()
 
     def generate():
         event_q: queue.Queue = queue.Queue()
