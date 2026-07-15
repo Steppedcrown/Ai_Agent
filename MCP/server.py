@@ -15,7 +15,9 @@ else:
     VALID_ENTITY_TYPES = set()
 
 mcp = FastMCP("elden-ring-mcp")
-_API = "http://localhost:8000"
+# Override with MCP_API_URL to route traffic through ObservabilityTool.
+# e.g.  MCP_API_URL=http://localhost:9001  (proxy forwards to :8000)
+_API = os.environ.get("MCP_API_URL", "http://localhost:8000")
 
 
 def _get(path: str, **params) -> dict:
