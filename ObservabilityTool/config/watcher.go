@@ -12,7 +12,7 @@ import (
         "github.com/fsnotify/fsnotify"
 )
 
-const defaultConfigPath = "~/.myagent/mcp_config.json"
+const defaultConfigPath = "mcp_config.json"
 
 // AgentConfig is the configuration schema read from mcp_config.json.
 type AgentConfig struct {

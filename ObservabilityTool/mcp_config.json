@@ -1,0 +1,11 @@
+{
+  "mcp_server_url": "http://localhost:8000",
+  "listen_port": 3001,
+  "flagged_terms": [
+    "ignore previous instructions",
+    "ignore all instructions",
+    "jailbreak",
+    "disregard your instructions",
+    "bypass restrictions"
+  ]
+}
